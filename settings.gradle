@@ -1,0 +1,5 @@
+rootProject.name = 'botw-randomizer'
+
+include 'ninten-file-tool'
+include 'aamp-java'
+

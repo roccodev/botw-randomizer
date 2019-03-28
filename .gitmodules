@@ -1,0 +1,6 @@
+[submodule "aamp-java"]
+	path = aamp-java
+	url = https://github.com/RoccoDev/aamp-java.git
+[submodule "ninten-file-tool"]
+	path = ninten-file-tool
+	url = https://github.com/RoccoDev/ninten-file-tool.git
