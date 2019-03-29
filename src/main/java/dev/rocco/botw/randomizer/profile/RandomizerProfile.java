@@ -10,7 +10,7 @@ import java.util.List;
 
 public class RandomizerProfile {
 
-    private String name, description;
+    private String name, description, author;
     private String[] items;
 
     private HashMap<String, List<RandomizerFile>> filePatches = new HashMap<>();
@@ -20,6 +20,7 @@ public class RandomizerProfile {
         RandomizerProfile result = new RandomizerProfile();
         result.name = object.getString("name");
         result.description = object.getString("description");
+        result.author = object.getString("author");
 
         result.items = object.getJSONArray("items").toList().toArray(new String[0]);
 
@@ -36,6 +37,10 @@ public class RandomizerProfile {
         lists.keys().forEachRemaining(k -> result.lists.put(k, RandomizerList.fromJson(lists.getJSONObject(k))));
 
         return result;
+    }
+
+    public String getAuthor() {
+        return author;
     }
 
     public String getName() {

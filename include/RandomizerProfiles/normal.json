@@ -1,6 +1,7 @@
 {
   "name": "Normal",
   "description": "Normal difficulty",
+  "author": "RoccoDev",
   "items": [
     "Enemies",
     "Loot tables"

@@ -20,6 +20,8 @@ public class FileInit {
                     RandomizerProfile.fromJson(new JSONObject(String.join("\n",
                             Files.readAllLines(Paths.get(f.toURI()), Charset.forName("UTF-8"))))));
         }
+
+        Config.profileIndex = Config.profiles.keySet().stream().findFirst().get();
     }
 
     private static void checkAndCreate(String path, boolean dir) {
