@@ -15,10 +15,25 @@ subprojects {
     apply plugin: 'java'
 }
 
+configurations {
+    embed
+}
+
+configurations.compile.extendsFrom(configurations.embed)
+
+jar {
+    manifest.attributes (
+            "Main-Class": "dev.rocco.botw.randomizer.RandomizerMain"
+    )
+    from {
+        configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile group: 'org.json', name: 'json', version: '20180813'
+    embed group: 'org.json', name: 'json', version: '20180813'
 
     compile project('ninten-file-tool')
-
 }
+
+

@@ -1,8 +1,13 @@
 {
   "name": "Normal",
+  "description": "Normal difficulty",
+  "items": [
+    "Enemies",
+    "Loot tables"
+  ],
   "lists": {
     "dgnCheck": {
-      "DgnObj_DungeonEntrance_Moss": 100
+      "DgnObj_DungeonEntrance_Moss": 100.0
     }
   },
   "patches": {
