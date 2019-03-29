@@ -19,4 +19,8 @@ public class RandomizerMain {
 
         GuiMainMenu.show("Breath of the Wild Randomizer v" + VERSION);
     }
+
+    public static void randomize() {
+
+    }
 }

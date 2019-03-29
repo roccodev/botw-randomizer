@@ -4,6 +4,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import dev.rocco.botw.randomizer.Config;
+import dev.rocco.botw.randomizer.RandomizerMain;
 import dev.rocco.botw.randomizer.io.OutputManager;
 import dev.rocco.botw.randomizer.profile.RandomizerProfile;
 
@@ -105,6 +106,12 @@ public class GuiMainMenu {
 
             }
         });
+
+        randomizeButton = new JButton();
+        randomizeButton.addActionListener(actionEvent -> {
+            Config.seed = Long.parseLong(textField3.getText());
+            RandomizerMain.randomize();
+        });
     }
 
     private void addArray(DefaultListModel<String> model, JLabel label) {
@@ -189,7 +196,25 @@ public class GuiMainMenu {
         consoleViaSdcafiineRadioButton = new JRadioButton();
         consoleViaSdcafiineRadioButton.setText("Console (via sdcafiine)");
         panel2.add(consoleViaSdcafiineRadioButton, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        randomizeButton = new JButton();
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new GridLayoutManager(6, 1, new Insets(0, 0, 0, 0), -1, -1));
+        tabbedPane1.addTab("About", panel3);
+        final JLabel label7 = new JLabel();
+        label7.setText("Breath of the Wild Randomizer");
+        panel3.add(label7, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer3 = new Spacer();
+        panel3.add(spacer3, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        final JLabel label8 = new JLabel();
+        label8.setText("Copyright 2019 - RoccoDev");
+        panel3.add(label8, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label9 = new JLabel();
+        label9.setText("This project is licensed under the GPLv3 and Apache 2.0 licenses.");
+        panel3.add(label9, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label10 = new JLabel();
+        label10.setText("https://github.com/RoccoDev/botw-randomizer");
+        panel3.add(label10, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer4 = new Spacer();
+        panel3.add(spacer4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         randomizeButton.setText("Randomize");
         panel.add(randomizeButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         ButtonGroup buttonGroup;
