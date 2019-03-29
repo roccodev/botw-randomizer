@@ -1,5 +1,6 @@
 package dev.rocco.botw.randomizer;
 
+import dev.rocco.botw.randomizer.io.InputManager;
 import dev.rocco.botw.randomizer.profile.RandomizerProfile;
 import org.json.JSONObject;
 
@@ -14,6 +15,7 @@ public class FileInit {
     public static void initFiles() throws IOException {
         checkAndCreate("FileCache", true);
 
+        InputManager.init();
         File profiles = new File("RandomizerProfiles");
         for(File f : profiles.listFiles()) {
             Config.profiles.put(f.getName().replace(".json", ""),

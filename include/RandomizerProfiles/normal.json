@@ -14,7 +14,7 @@
   "patches": {
     "Map/MainField/A-1/A-1_Dynamic.smubin": {
       "1287156282": {
-        "UnitConfigName": "@dgn_check"
+        "UnitConfigName": "@dgnCheck"
       }
     }
   }

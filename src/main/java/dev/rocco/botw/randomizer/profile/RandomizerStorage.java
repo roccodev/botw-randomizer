@@ -4,6 +4,6 @@ import java.util.HashMap;
 
 public class RandomizerStorage {
 
-    public static HashMap<String, RandomizerList> lists;
+    public static HashMap<String, RandomizerList> lists = new HashMap<>();
 
 }

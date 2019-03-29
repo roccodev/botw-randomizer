@@ -5,6 +5,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import dev.rocco.botw.randomizer.Config;
 import dev.rocco.botw.randomizer.RandomizerMain;
+import dev.rocco.botw.randomizer.io.InputManager;
 import dev.rocco.botw.randomizer.io.OutputManager;
 import dev.rocco.botw.randomizer.profile.RandomizerProfile;
 
@@ -86,9 +87,9 @@ public class GuiMainMenu {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
 
                 File f = fileChooser.getSelectedFile();
-                OutputManager.outputFile = f;
+                Config.inputFile = f;
                 textField1.setText(f.getAbsolutePath());
-
+                InputManager.init();
             }
         });
 
@@ -101,7 +102,7 @@ public class GuiMainMenu {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
 
                 File f = fileChooser.getSelectedFile();
-                Config.inputFile = f;
+                OutputManager.outputFile = f;
                 textField2.setText(f.getAbsolutePath());
 
             }

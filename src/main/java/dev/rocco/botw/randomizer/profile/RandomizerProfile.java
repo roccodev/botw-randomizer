@@ -4,16 +4,16 @@ import dev.rocco.botw.randomizer.Config;
 import dev.rocco.botw.randomizer.rand.RandomPicker;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class RandomizerProfile {
 
     private String name, description, author;
     private String[] items;
 
-    private HashMap<String, List<RandomizerFile>> filePatches = new HashMap<>();
+    private HashMap<String, RandomizerFile> filePatches = new HashMap<>();
     private HashMap<String, RandomizerList> lists = new HashMap<>();
 
     public static RandomizerProfile fromJson(JSONObject object) {
@@ -26,12 +26,7 @@ public class RandomizerProfile {
 
         JSONObject patches = object.getJSONObject("patches");
 
-        patches.keys().forEachRemaining(k -> {
-            List<RandomizerFile> files = result.filePatches.getOrDefault(k, new ArrayList<>());
-            files.add(RandomizerFile.fromJson(k, patches.getJSONObject(k)));
-
-            result.filePatches.put(k, files);
-        });
+        patches.keys().forEachRemaining(k -> result.filePatches.put(k, RandomizerFile.fromJson(k, patches.getJSONObject(k))));
 
         JSONObject lists = object.getJSONObject("lists");
         lists.keys().forEachRemaining(k -> result.lists.put(k, RandomizerList.fromJson(lists.getJSONObject(k))));
@@ -55,7 +50,7 @@ public class RandomizerProfile {
         return items;
     }
 
-    public HashMap<String, List<RandomizerFile>> getFilePatches() {
+    public HashMap<String, RandomizerFile> getFilePatches() {
         return filePatches;
     }
 
@@ -73,5 +68,12 @@ public class RandomizerProfile {
     private RandomizerList getList(String name) {
         if(!lists.containsKey(name) && !RandomizerStorage.lists.containsKey(name)) return null;
         return lists.containsKey(name) ? lists.get(name) : RandomizerStorage.lists.get(name);
+    }
+
+    public void patchAll() throws IOException {
+        for(Map.Entry<String, RandomizerFile> entry : filePatches.entrySet()) {
+            entry.getValue().setFiles();
+            entry.getValue().patchAll(this);
+        }
     }
 }

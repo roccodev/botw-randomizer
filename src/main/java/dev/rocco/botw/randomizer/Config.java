@@ -9,7 +9,7 @@ public class Config {
 
     public static Long seed;
     public static HashMap<String, RandomizerProfile> profiles = new HashMap<>();
-    public static File inputFile;
+    public static File inputFile = new File("");
     public static String profileIndex;
 
 }

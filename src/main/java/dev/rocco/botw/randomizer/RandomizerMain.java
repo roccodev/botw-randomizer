@@ -1,6 +1,7 @@
 package dev.rocco.botw.randomizer;
 
 import dev.rocco.botw.randomizer.gui.GuiMainMenu;
+import dev.rocco.botw.randomizer.profile.RandomizerProfile;
 
 import java.io.IOException;
 
@@ -21,6 +22,11 @@ public class RandomizerMain {
     }
 
     public static void randomize() {
-
+        RandomizerProfile profile = Config.profiles.get(Config.profileIndex);
+        try {
+            profile.patchAll();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

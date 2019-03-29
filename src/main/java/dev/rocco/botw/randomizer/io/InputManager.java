@@ -9,7 +9,7 @@ public class InputManager {
     private static File contentsFolder;
 
     public static void init() {
-        contentsFolder = new File(Config.inputFile.getAbsolutePath() + "/contents");
+        contentsFolder = new File(Config.inputFile.getAbsolutePath() + "/content/");
     }
 
     public static File getContentsFolder() {

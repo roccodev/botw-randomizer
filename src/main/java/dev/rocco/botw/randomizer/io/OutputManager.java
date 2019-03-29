@@ -1,25 +1,15 @@
 package dev.rocco.botw.randomizer.io;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 public class OutputManager {
 
     public static File outputFile = new File("RandomizerOutput/");
 
-    public static void addToOutput(String fileNameAndPath, byte[] data) {
-        File f = new File(outputFile.getAbsolutePath() + fileNameAndPath);
+    public static File addToOutput(String fileNameAndPath) {
+        File f = new File(outputFile.getAbsolutePath() + "/" + fileNameAndPath);
         f.getParentFile().mkdirs();
-
-        try {
-            f.createNewFile();
-            Files.write(Paths.get(f.toURI()), data, StandardOpenOption.WRITE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return f;
     }
 
     public static String makeOutputPath(String initial) {

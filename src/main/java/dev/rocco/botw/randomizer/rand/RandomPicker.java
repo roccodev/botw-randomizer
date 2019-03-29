@@ -1,15 +1,14 @@
 package dev.rocco.botw.randomizer.rand;
 
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 public class RandomPicker {
 
     public static String getKey(Map<String, Double> percents, Long seed) {
-        ThreadLocalRandom rand = ThreadLocalRandom.current();
-        if(seed != null) rand.setSeed(seed);
+        Random rand = seed != null ? new Random(seed) : new Random();
 
-        double randNum = rand.nextDouble(100D);
+        double randNum = rand.nextDouble() * 100D;
 
         for(Map.Entry<String, Double> entry : percents.entrySet()) {
             randNum -= entry.getValue();
