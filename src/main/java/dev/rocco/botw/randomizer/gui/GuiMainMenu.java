@@ -9,8 +9,6 @@ import dev.rocco.botw.randomizer.profile.RandomizerProfile;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.io.File;
 
@@ -72,7 +70,8 @@ public class GuiMainMenu {
         comboBox1 = new JComboBox(Config.profiles.values().stream().map(v -> v.getName()).toArray());
         comboBox1.addItemListener(itemEvent -> {
             if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
-                System.out.println(itemEvent.getItem());
+                Config.profileIndex = Config.profiles.entrySet().stream().filter(e -> e.getValue().getName()
+                        .equals(itemEvent.getItem())).findAny().get().getKey();
                 addArray(model, usingProfileByAuthorLabel);
             }
         });
