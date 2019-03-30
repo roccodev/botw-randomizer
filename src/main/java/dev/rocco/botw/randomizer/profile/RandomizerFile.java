@@ -35,7 +35,8 @@ public class RandomizerFile {
 
     public void setFiles() {
         this.file = new File(InputManager.getContentsFolder().getAbsolutePath() + "/" + fileName);
-        this.outputFile = OutputManager.addToOutput(fileName);
+        this.outputFile = OutputManager.addToOutput("/content/" + fileName);
+        OutputManager.backup(file, "/content/" + fileName);
     }
 
     public HashMap<String, List<RandomizerPatch>> getPatches() {

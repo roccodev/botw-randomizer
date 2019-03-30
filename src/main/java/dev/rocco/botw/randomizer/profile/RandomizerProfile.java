@@ -1,9 +1,13 @@
 package dev.rocco.botw.randomizer.profile;
 
 import dev.rocco.botw.randomizer.Config;
+import dev.rocco.botw.randomizer.gui.ProgressDialog;
+import dev.rocco.botw.randomizer.io.OutputManager;
 import dev.rocco.botw.randomizer.rand.RandomPicker;
 import org.json.JSONObject;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,9 +75,32 @@ public class RandomizerProfile {
     }
 
     public void patchAll() throws IOException {
+
+        new Thread(ProgressDialog::showDialog).start();
+        OutputManager.clean();
+        OutputManager.copyReadme();
+        OutputManager.patchVersion();
+
+        int total = filePatches.size();
+        int count = 0;
+
         for(Map.Entry<String, RandomizerFile> entry : filePatches.entrySet()) {
             entry.getValue().setFiles();
             entry.getValue().patchAll(this);
+            if(++count == total) {
+                ProgressDialog.inst.dispose();
+                int input = JOptionPane.showOptionDialog(
+                        null, "Patch successful.",
+                        "BOTW Randomizer",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE, null, new String[] {"Go to output"}, null);
+
+                if(input == JOptionPane.OK_OPTION) {
+                    Desktop.getDesktop().open(OutputManager.outputFile);
+                }
+
+            }
+            else ProgressDialog.inst.progressBar1.setValue(count / total * 100);
         }
     }
 }

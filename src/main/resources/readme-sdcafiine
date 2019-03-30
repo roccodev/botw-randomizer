@@ -1,0 +1,28 @@
+###########################################
+How to apply patches made by the randomizer
+on a real Wii U using SDCafiine
+###########################################
+
+1. Install SDCafiine if you haven't already.
+   More info can be found here: https://github.com/Maschell/SDCafiine
+
+2. Insert your SD card into your computer, and open it using
+   your file explorer.
+
+3. Drag and drop the 'sdcafiine' folder you find in the RandomizerOutput folder (the one where this file is) into your
+   SD card.
+
+4. Safely eject the SD card from your computer, and insert it into your Wii U console.
+
+5. Get into the Homebrew Launcher and launch SDCafiine.
+   You'll see the system menu after it's loaded.
+
+6. Launch Breath of the Wild.
+
+7. Verify the patches are loaded by looking at the game version. It should be
+   '1.5.0-Randomized'.
+   If you are using any of the built-in profiles, you can also verify it by teleporting to the
+   Hia Miu Shrine' (the one in the top-left corner of the map). It should be mossy instead of snowy.
+
+Note: It is recommended to use a different save file for the randomized version.
+      I am not responsible for any data loss or corruption.

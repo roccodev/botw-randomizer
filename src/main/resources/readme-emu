@@ -1,0 +1,41 @@
+###########################################
+How to apply patches made by the randomizer
+using CEMU
+###########################################
+
+1. Find your CEMU folder (it should be called something like cemu-{version}, where {version}
+   is the CEMU version (e.g, 1.15.3).
+
+2. Drag and drop the 'mlc01' folder you find in the RandomizerOutput folder (the one where this file is) into your
+   CEMU folder.
+
+3. You should get a prompt about conflicting files.
+   Select 'Merge All'.
+
+4. Launch Breath of the Wild using CEMU.
+
+5. Verify the patches are loaded by looking at the game version. It should be
+   '1.5.0-Randomized'.
+   If you are using any of the built-in profiles, you can also verify it by teleporting to the
+   'Hia Miu Shrine' (the one in the top-left corner of the map). It should be mossy instead of snowy.
+
+
+Note: It is recommended to use a different save file for the randomized version.
+      I am not responsible for any data loss or corruption.
+
+
+################################
+Rolling back the changes /
+Returning to normal Breath of the
+Wild
+################################
+
+1. Go back one directory from the one this file is.
+   You should see these folders: 'RandomizerOutput', 'RandomizerProfiles',
+   'RandomizerLocations' and 'RandomizerBackup'.
+
+2. Open the 'RandomizerBackup' folder.
+
+3. Follow steps 1-4 from the guide above.
+
+4. Verify the patches are reverted by confirming that the game version is '1.5.0'.
