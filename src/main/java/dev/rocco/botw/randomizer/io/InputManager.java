@@ -9,7 +9,7 @@ public class InputManager {
     private static File contentsFolder;
 
     public static void init() {
-        String suffix = Config.aoc ? "/aoc/content/" : "/content/";
+        String suffix = Config.aoc ? "/aoc/content/0010/" : "/content/";
         contentsFolder = new File(Config.inputFile.getAbsolutePath() + suffix);
     }
 

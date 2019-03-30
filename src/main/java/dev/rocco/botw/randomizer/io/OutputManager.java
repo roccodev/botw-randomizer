@@ -18,7 +18,8 @@ public class OutputManager {
     public static File backupFile = new File("RandomizerBackup/");
 
     public static File addToOutput(String fileNameAndPath) {
-        String filePath = Config.aoc ? "aoc/" + fileNameAndPath : fileNameAndPath;
+        String filePath = Config.aoc ? "aoc/" + fileNameAndPath.replace("content/", "content/0010/")
+                : fileNameAndPath;
         String path = Config.outputMode == 0 ?
                 /* Emulator mode */ outputFile.getAbsolutePath() + "/mlc01/usr/title/" + Config.VENDOR_ID + "/" + Config.TITLE_ID +
                 "/" + filePath :
@@ -31,7 +32,7 @@ public class OutputManager {
     }
 
     public static void backup(File file, String nameAndPath) {
-        String filePath = Config.aoc ? "aoc/" + nameAndPath : nameAndPath;
+        String filePath = Config.aoc ? "aoc/" + nameAndPath.replace("content/", "content/0010/") : nameAndPath;
         String backupPath = "RandomizerBackup/mlc01/usr/title/" + Config.VENDOR_ID + "/" + Config.TITLE_ID +
                 "/" + filePath;
 

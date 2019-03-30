@@ -9,6 +9,21 @@
   "lists": {
     "dgnCheck": {
       "DgnObj_DungeonEntrance_Moss": 100.0
+    },
+    "normalEnemies": {
+      "Enemy_Bokoblin_Junior": 40.0,
+      "Enemy_Bokoblin_Middle": 20.0,
+      "Enemy_Lizalfos_Junior": 20.0,
+      "Enemy_Lizalfos_Middle": 10.0,
+      "Enemy_Moriblin_Junior": 5.0,
+      "Enemy_Moriblin_Middle": 5.0
+    },
+    "ancientEnemies": {
+      "Enemy_Guardian_A": 50.0,
+      "Enemy_Guardian_B": 30.0,
+      "Enemy_Guardian_C": 10.0,
+      "Enemy_Guardian_Mini_Middle": 5.0,
+      "Enemy_Guardian_Mini_Senior": 5.0
     }
   },
   "patches": {
@@ -16,6 +31,9 @@
       "1287156282": {
         "UnitConfigName": "@dgnCheck"
       }
+    },
+    "#enemycamps": {
+      "UnitConfigName": "@normalEnemies"
     }
   }
 }

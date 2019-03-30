@@ -3,6 +3,8 @@ package dev.rocco.botw.randomizer.profile;
 import dev.rocco.botw.randomizer.Config;
 import dev.rocco.botw.randomizer.gui.ProgressDialog;
 import dev.rocco.botw.randomizer.io.OutputManager;
+import dev.rocco.botw.randomizer.profile.patch.MapLocation;
+import dev.rocco.botw.randomizer.profile.patch.MapPatch;
 import dev.rocco.botw.randomizer.rand.RandomPicker;
 import org.json.JSONObject;
 
@@ -17,6 +19,8 @@ public class RandomizerProfile {
     private String name, description, author;
     private String[] items;
 
+    private JSONObject json;
+
     private HashMap<String, RandomizerFile> filePatches = new HashMap<>();
     private HashMap<String, RandomizerList> lists = new HashMap<>();
 
@@ -28,14 +32,38 @@ public class RandomizerProfile {
 
         result.items = object.getJSONArray("items").toList().toArray(new String[0]);
 
-        JSONObject patches = object.getJSONObject("patches");
-
-        patches.keys().forEachRemaining(k -> result.filePatches.put(k, RandomizerFile.fromJson(k, patches.getJSONObject(k))));
+        result.json = object;
 
         JSONObject lists = object.getJSONObject("lists");
         lists.keys().forEachRemaining(k -> result.lists.put(k, RandomizerList.fromJson(lists.getJSONObject(k))));
 
         return result;
+    }
+
+    public void loadPatches() {
+        JSONObject patches = json.getJSONObject("patches");
+
+        patches.keys().forEachRemaining(k -> {
+            if(k.charAt(0) == '#') {
+                RandomizerLocation loc = RandomizerLocation.fromFile(k.substring(1));
+                if(loc.requiresAoc() && Config.aoc) {
+
+                    JSONObject values = patches.getJSONObject(k);
+                    MapPatch patch = MapPatch.fromJson(k, values);
+
+                    try {
+                        MapLocation.findHashes(loc.getItems(), patch);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+            else filePatches.put(k, RandomizerFile.fromJson(k, patches.getJSONObject(k)));
+        });
+        System.out.println("Total matches: " + MapLocation.getResults().size());
+        if(MapLocation.getResults().size() != 0)
+            filePatches.putAll(MapLocation.getResults());
     }
 
     public String getAuthor() {
@@ -76,7 +104,7 @@ public class RandomizerProfile {
 
     public void patchAll() throws IOException {
 
-        new Thread(ProgressDialog::showDialog).start();
+
         OutputManager.clean();
         OutputManager.copyReadme();
         OutputManager.patchVersion();

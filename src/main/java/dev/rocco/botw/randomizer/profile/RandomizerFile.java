@@ -6,6 +6,7 @@ import com.arbiter34.byml.nodes.DictionaryNode;
 import com.arbiter34.file.io.BinaryAccessFile;
 import com.arbiter34.yaz0.Yaz0Decoder;
 import com.arbiter34.yaz0.Yaz0Encoder;
+import dev.rocco.botw.randomizer.gui.ProgressDialog;
 import dev.rocco.botw.randomizer.io.InputManager;
 import dev.rocco.botw.randomizer.io.OutputManager;
 import dev.rocco.botw.randomizer.profile.patch.MapPatch;
@@ -25,7 +26,7 @@ public class RandomizerFile {
 
     private HashMap<String, List<RandomizerPatch>> patches = new HashMap<>();
 
-    private RandomizerFile(String fileName) {
+    public RandomizerFile(String fileName) {
         this.fileName = fileName;
     }
 
@@ -35,6 +36,7 @@ public class RandomizerFile {
 
     public void setFiles() {
         this.file = new File(InputManager.getContentsFolder().getAbsolutePath() + "/" + fileName);
+        System.out.println(file.getAbsolutePath());
         this.outputFile = OutputManager.addToOutput("/content/" + fileName);
         OutputManager.backup(file, "/content/" + fileName);
     }
@@ -66,17 +68,22 @@ public class RandomizerFile {
         BymlFile byml = BymlFile.parse(inputDecomp);
         DictionaryNode root = (DictionaryNode) byml.getRoot();
         ArrayNode objs = (ArrayNode) root.get("Objs");
-
+        ProgressDialog.prog( "Patching " + file.getName());
         for(List<RandomizerPatch> patches : patches.values()) {
             for(RandomizerPatch patch : patches) {
                 if(patch.getType() == 0) {
+
                     patch.patch(profile, objs);
                 }
             }
         }
         String uuid = UUID.randomUUID().toString();
         byml.write("FileCache/Decomp-" + uuid);
-        Yaz0Encoder.encode(new BinaryAccessFile("FileCache/Decomp-" + uuid, "r"), outputFile.getAbsolutePath());
+        BinaryAccessFile out = new BinaryAccessFile("FileCache/Decomp-" + uuid, "r");
+        Yaz0Encoder.encode(out, outputFile.getAbsolutePath());
+
+        inputDecomp.clean();
+        out.clean();
     }
 
 }

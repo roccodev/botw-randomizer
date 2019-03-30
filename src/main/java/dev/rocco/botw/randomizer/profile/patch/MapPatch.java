@@ -33,10 +33,14 @@ public class MapPatch implements RandomizerPatch {
         return result;
     }
 
+    public MapPatch(MapPatch clone, String hashId) {
+        this.values = clone.values;
+        this.hashId = hashId;
+    }
+
     @Override
     public void patch(RandomizerProfile profile, Object in) {
         ArrayNode objs = (ArrayNode) in;
-
         values.forEach((k, v) -> getByHash(hashId, objs).get(k).setValue(profile.pickValue(v)));
     }
 

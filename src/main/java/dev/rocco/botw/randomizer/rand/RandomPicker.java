@@ -5,10 +5,15 @@ import java.util.Random;
 
 public class RandomPicker {
 
+    private static Random rand;
+
     public static String getKey(Map<String, Double> percents, Long seed) {
-        Random rand = seed != null ? new Random(seed) : new Random();
+        if(rand == null)
+            rand = seed != null ? new Random(seed) : new Random();
 
         double randNum = rand.nextDouble() * 100D;
+
+        System.out.println("Random: " + randNum);
 
         for(Map.Entry<String, Double> entry : percents.entrySet()) {
             randNum -= entry.getValue();

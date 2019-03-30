@@ -9,12 +9,14 @@ import java.awt.*;
 public class ProgressDialog extends JDialog {
     private JPanel contentPane;
     public JProgressBar progressBar1;
+    public JLabel patchingLabel;
     public static ProgressDialog inst;
 
     public ProgressDialog() {
         inst = this;
         setContentPane(contentPane);
         setModal(true);
+        createUIComponents();
     }
 
 
@@ -24,8 +26,12 @@ public class ProgressDialog extends JDialog {
         dialog.setVisible(true);
     }
 
+    public static void prog(String progress) {
+        ProgressDialog.inst.patchingLabel.setText(progress);
+    }
 
     private void createUIComponents() {
+        patchingLabel = new JLabel();
         progressBar1 = new JProgressBar();
     }
 
