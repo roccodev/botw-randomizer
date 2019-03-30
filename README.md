@@ -4,6 +4,9 @@
 [![Build Status](https://travis-ci.org/RoccoDev/botw-randomizer.svg?branch=master)](https://travis-ci.org/RoccoDev/botw-randomizer)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a037a977bc444ff7ac8f87c0df323377)](https://www.codacy.com/app/RoccoDev/aamp-java?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=RoccoDev/aamp-java&amp;utm_campaign=Badge_Grade)
 
+![Preview](https://rocco.dev/img/botw-rando.png)
+*Here the built-in `Normal` profile changed the Bokoblin to a Lizalfos.*
+
 ## How does this work?
 This randomizer generates data files to put into the `contents` folder of the Breath of the Wild ROM.
 
