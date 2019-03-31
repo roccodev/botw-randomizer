@@ -4,3 +4,6 @@
 [submodule "ninten-file-tool"]
 	path = ninten-file-tool
 	url = https://github.com/RoccoDev/ninten-file-tool.git
+[submodule "sarc-java"]
+	path = sarc-java
+	url = https://github.com/RoccoDev/sarc-java.git
