@@ -25,6 +25,10 @@ public class NameEntry implements Comparable<NameEntry> {
         return size;
     }
 
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     @Override
     public int compareTo(NameEntry otherEntry) {
         return this.name.compareTo(otherEntry.name);

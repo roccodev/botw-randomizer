@@ -28,11 +28,13 @@ public class ResourceTable {
     private File outputFile;
 
     public ResourceTable() throws IOException {
-        File input = new File(InputManager.getContentsFolder().getAbsolutePath()
+        File input = new File(InputManager.getContentsFolderUniversal().getAbsolutePath()
                 + "/System/Resource/ResourceSizeTable.product.srsizetable");
 
         BinaryAccessFile binaryInput = new BinaryAccessFile(input, "r");
         BinaryAccessFile decompressed = Yaz0Decoder.decode(binaryInput);
+
+        OutputManager.backup(input, "System/Resource/ResourceSizeTable.product.srsizetable");
 
         reader = new FileReader(new File(decompressed.getPath()));
         reader.parse();
@@ -109,6 +111,18 @@ public class ResourceTable {
                         .getAbsolutePath());
 
         toCompress.clean();
+    }
+
+    public void setSize(String name, int size) {
+        nameMap.stream().filter(e -> e.getName().equals(name)).findAny()
+                .ifPresent(e -> e.setSize(size));
+
+        setSize(Crc32HashCalc.calc(name), size);
+    }
+
+    public void setSize(long crc32, int size) {
+        crc32Map.stream().filter(e -> e.getCrc32() == crc32).findAny()
+                .ifPresent(e -> e.setSize(size));
     }
 
     public ArrayList<Crc32Entry> getCrc32Map() {

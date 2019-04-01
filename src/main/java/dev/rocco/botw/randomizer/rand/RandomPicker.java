@@ -13,8 +13,6 @@ public class RandomPicker {
 
         double randNum = rand.nextDouble() * 100D;
 
-        System.out.println("Random: " + randNum);
-
         for(Map.Entry<String, Double> entry : percents.entrySet()) {
             randNum -= entry.getValue();
 

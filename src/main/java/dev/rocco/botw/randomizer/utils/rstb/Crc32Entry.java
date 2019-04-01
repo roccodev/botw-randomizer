@@ -25,6 +25,10 @@ public class Crc32Entry implements Comparable<Crc32Entry> {
         return size;
     }
 
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     @Override
     public int compareTo(Crc32Entry crc32Entry) {
         return Long.compare(crc32, crc32Entry.crc32);

@@ -6,6 +6,7 @@ import dev.rocco.botw.randomizer.io.OutputManager;
 import dev.rocco.botw.randomizer.profile.patch.MapLocation;
 import dev.rocco.botw.randomizer.profile.patch.MapPatch;
 import dev.rocco.botw.randomizer.rand.RandomPicker;
+import dev.rocco.botw.randomizer.utils.rstb.ResourceTable;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -23,6 +24,8 @@ public class RandomizerProfile {
 
     private HashMap<String, RandomizerFile> filePatches = new HashMap<>();
     private HashMap<String, RandomizerList> lists = new HashMap<>();
+
+    private ResourceTable rstb;
 
     public static RandomizerProfile fromJson(JSONObject object) {
         RandomizerProfile result = new RandomizerProfile();
@@ -86,6 +89,10 @@ public class RandomizerProfile {
         return filePatches;
     }
 
+    public ResourceTable getRstb() {
+        return rstb;
+    }
+
     public String pickValue(String input) {
         if(input.charAt(0) == '@') {
             String listName = input.substring(1);
@@ -109,6 +116,9 @@ public class RandomizerProfile {
         OutputManager.copyReadme();
         OutputManager.patchVersion();
 
+        rstb = new ResourceTable();
+        rstb.parse();
+
         int total = filePatches.size();
         int count = 0;
 
@@ -130,5 +140,7 @@ public class RandomizerProfile {
             }
             else ProgressDialog.inst.progressBar1.setValue(count / total * 100);
         }
+
+        rstb.write();
     }
 }

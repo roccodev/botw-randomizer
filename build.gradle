@@ -36,6 +36,7 @@ dependencies {
 
     embed project('ninten-file-tool')
     embed project('sarc-java')
+    embed project('aamp-java')
 }
 
 

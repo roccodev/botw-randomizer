@@ -80,6 +80,10 @@ public class RandomizerFile {
         String uuid = UUID.randomUUID().toString();
         byml.write("FileCache/Decomp-" + uuid);
         BinaryAccessFile out = new BinaryAccessFile("FileCache/Decomp-" + uuid, "r");
+
+        int alignedSize = (int) ((out.length() + 31) & -32);
+        profile.getRstb().setSize(fileName, alignedSize + 0xe4 + 0x20);
+
         Yaz0Encoder.encode(out, outputFile.getAbsolutePath());
 
         inputDecomp.clean();
