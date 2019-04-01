@@ -2,7 +2,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/roccodev/botw-randomizer/badge)](https://www.codefactor.io/repository/github/roccodev/botw-randomizer)
 [![Maintainability](https://api.codeclimate.com/v1/badges/93dcbe571540aa9c5e45/maintainability)](https://codeclimate.com/github/RoccoDev/botw-randomizer/maintainability)
 [![Build Status](https://travis-ci.org/RoccoDev/botw-randomizer.svg?branch=master)](https://travis-ci.org/RoccoDev/botw-randomizer)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a037a977bc444ff7ac8f87c0df323377)](https://www.codacy.com/app/RoccoDev/aamp-java?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=RoccoDev/aamp-java&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5319f4535300499fb234a657e5aa50aa)](https://www.codacy.com/app/RoccoDev/botw-randomizer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=RoccoDev/botw-randomizer&amp;utm_campaign=Badge_Grade)
 ![Downloads](https://img.shields.io/github/downloads/RoccoDev/botw-randomizer/total.svg)
 
 ![Preview](https://rocco.dev/img/botw-rando.png)

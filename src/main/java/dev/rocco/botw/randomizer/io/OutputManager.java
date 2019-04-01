@@ -47,6 +47,18 @@ public class OutputManager {
         }
     }
 
+    public static File addToOutputUniversal(String fileNameAndPath) {
+        String path = Config.outputMode == 0 ?
+                /* Emulator mode */ outputFile.getAbsolutePath() + "/mlc01/usr/title/" + Config.VENDOR_ID + "/" + Config.TITLE_ID +
+                "/" + fileNameAndPath :
+                /* SDCafiine mode */ outputFile.getAbsolutePath() + "/sdcafiine/" + Config.VENDOR_ID + Config.TITLE_ID +
+                "/BOTWRandomizer/" + fileNameAndPath;
+
+        File f = new File(path);
+        f.getParentFile().mkdirs();
+        return f;
+    }
+
     public static String makeOutputPath(String initial) {
         return outputFile.getAbsolutePath() + initial;
     }
@@ -82,7 +94,7 @@ public class OutputManager {
 
     public static void patchVersion() {
         String path = "content/System/Version.txt";
-        File out = addToOutput(path);
+        File out = addToOutputUniversal(path);
 
         try {
             Files.write(out.toPath(), "1.5.0-Randomized".getBytes(Charset.forName("UTF-8")));

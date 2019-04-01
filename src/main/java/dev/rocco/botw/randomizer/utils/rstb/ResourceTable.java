@@ -1,19 +1,47 @@
+// Licensed under GPLv2+
+// Original: https://github.com/zeldamods/rstb/blob/master/rstb/rstb.py
+// Ported to Java by RoccoDev
+// Copyright 2018 leoetlino <leo@leolam.fr>
+
 package dev.rocco.botw.randomizer.utils.rstb;
 
+import com.arbiter34.file.io.BinaryAccessFile;
+import com.arbiter34.yaz0.Yaz0Decoder;
+import com.arbiter34.yaz0.Yaz0Encoder;
+import dev.rocco.botw.randomizer.io.InputManager;
+import dev.rocco.botw.randomizer.io.OutputManager;
 import dev.rocco.filelib.sarc.io.FileReader;
+import dev.rocco.filelib.sarc.io.FileWriter;
 
 import java.io.File;
-import java.util.HashMap;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class ResourceTable {
 
     private FileReader reader;
-    private HashMap<Integer, Integer> crc32Map = new HashMap<>();
-    private HashMap<String, Integer> nameMap = new HashMap<>();
+    private ArrayList<Crc32Entry> crc32Map = new ArrayList<>();
+    private ArrayList<NameEntry> nameMap = new ArrayList<>();
 
-    public ResourceTable(File input) {
-        reader = new FileReader(input);
+    private FileWriter writer;
+    private File outputFile;
+
+    public ResourceTable() throws IOException {
+        File input = new File(InputManager.getContentsFolder().getAbsolutePath()
+                + "/System/Resource/ResourceSizeTable.product.srsizetable");
+
+        BinaryAccessFile binaryInput = new BinaryAccessFile(input, "r");
+        BinaryAccessFile decompressed = Yaz0Decoder.decode(binaryInput);
+
+        reader = new FileReader(new File(decompressed.getPath()));
         reader.parse();
+
+        decompressed.clean();
+
+        outputFile = new File("FileCache/RST_ToCompress");
+        if(!outputFile.exists()) outputFile.createNewFile();
+        writer = new FileWriter(outputFile);
     }
 
     public void parse() {
@@ -34,28 +62,60 @@ public class ResourceTable {
 
         if(crc32Bytes != null) {
             for(int i = 0; i < crc32Bytes.length / 8; i++) {
-                int crc32 = reader.readInt(8 * i);
-                int size = reader.readInt(8 * i + 4);
+                long crc32 = ByteReaderWrapper.readUnsignedInt(crc32Bytes, 8 * i);
+                int size = ByteReaderWrapper.readInt(crc32Bytes, 8 * i + 4);
 
-                crc32Map.put(crc32, size);
+                crc32Map.add(new Crc32Entry(crc32, size));
             }
         }
 
         if(nameBytes != null) {
             for(int i = 0; i < nameBytes.length / 132; i++) {
-                String name = reader.readString(132 * i, 128);
-                int size = reader.readInt(132 * i + 128);
+                String name = ByteReaderWrapper.readString(nameBytes, 132 * i);
+                int size = ByteReaderWrapper.readInt(nameBytes, 132 * i + 128);
 
-                nameMap.put(name, size);
+                nameMap.add(new NameEntry(name, size));
             }
         }
     }
 
-    public HashMap<Integer, Integer> getCrc32Map() {
+    public void write() throws IOException {
+        writer.writeString(0, "RSTB");
+        writer.writeInt(4, crc32Map.size());
+        writer.writeInt(8, nameMap.size());
+
+        int currentOffset = 8;
+
+        Collections.sort(crc32Map);
+        Collections.sort(nameMap);
+
+        for(Crc32Entry entry : crc32Map) {
+            writer.writeInt(currentOffset += 4, ByteReaderWrapper.getUnsignedInt(entry.getCrc32()));
+            writer.writeInt(currentOffset += 4, entry.getSize());
+        }
+
+        int newOffset = currentOffset - 128;
+
+        for(NameEntry entry : nameMap) {
+            writer.writeString(newOffset += 128, entry.getName());
+            writer.writeInt(newOffset += 4, entry.getSize());
+        }
+
+        writer.writeToFile();
+
+        BinaryAccessFile toCompress = new BinaryAccessFile(outputFile, "r");
+        Yaz0Encoder.encode(toCompress,
+                OutputManager.addToOutputUniversal("System/Resource/ResourceSizeTable.product.srsizetable")
+                        .getAbsolutePath());
+
+        toCompress.clean();
+    }
+
+    public ArrayList<Crc32Entry> getCrc32Map() {
         return crc32Map;
     }
 
-    public HashMap<String, Integer> getNameMap() {
+    public ArrayList<NameEntry> getNameMap() {
         return nameMap;
     }
 }
