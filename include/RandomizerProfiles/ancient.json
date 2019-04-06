@@ -1,0 +1,27 @@
+{
+  "name": "Ancient",
+  "author": "RoccoDev",
+  "description": "All enemies become guardians.",
+  "items": [
+    "Overworld enemies (Requires DLC)"
+  ],
+  "lists": {
+    "ancientEnemies": {
+      "Enemy_Guardian_A": 50.0,
+      "Enemy_Guardian_B": 30.0,
+      "Enemy_Guardian_C": 10.0,
+      "Enemy_Guardian_Mini_Middle": 5.0,
+      "Enemy_Guardian_Mini_Senior": 5.0
+    }
+  },
+  "patches": {
+    "Map/MainField/A-1/A-1_Dynamic.smubin": {
+      "1287156282": {
+        "UnitConfigName": "@dgnCheck"
+      }
+    },
+    "#enemycamps": {
+      "UnitConfigName": "@normalEnemies"
+    }
+  }
+}

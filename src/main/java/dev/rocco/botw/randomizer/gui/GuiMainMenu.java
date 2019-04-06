@@ -65,9 +65,12 @@ public class GuiMainMenu {
         list1.setModel(model);
 
         DefaultComboBoxModel<String> regions = new DefaultComboBoxModel<>();
+        regions.addElement("Detect automatically");
         regions.addElement("Europe");
         regions.addElement("North America");
         regions.addElement("Japan");
+
+        comboBox2.setModel(regions);
 
         addArray(model, usingProfileByAuthorLabel);
 
