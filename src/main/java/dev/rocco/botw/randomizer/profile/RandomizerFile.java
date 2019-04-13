@@ -10,6 +10,8 @@ import dev.rocco.botw.randomizer.gui.ProgressDialog;
 import dev.rocco.botw.randomizer.io.InputManager;
 import dev.rocco.botw.randomizer.io.OutputManager;
 import dev.rocco.botw.randomizer.profile.patch.MapPatch;
+import dev.rocco.filelib.sarc.SarcPacker;
+import dev.rocco.filelib.sarc.SarcUnpacker;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -23,6 +25,11 @@ public class RandomizerFile {
 
     private String fileName;
     private File file, outputFile;
+    private boolean universalPath = false;
+
+    public void setUniversalPath(boolean universalPath) {
+        this.universalPath = universalPath;
+    }
 
     private HashMap<String, List<RandomizerPatch>> patches = new HashMap<>();
 
@@ -35,9 +42,11 @@ public class RandomizerFile {
     }
 
     public void setFiles() {
-        this.file = new File(InputManager.getContentsFolder().getAbsolutePath() + "/" + fileName);
-        System.out.println(file.getAbsolutePath());
-        this.outputFile = OutputManager.addToOutput("/content/" + fileName);
+        this.file = new File((universalPath ? InputManager.getContentsFolderUniversal()
+                : InputManager.getContentsFolder()).getAbsolutePath() + "/" + fileName);
+        this.outputFile = universalPath ?
+                OutputManager.addToOutputUniversal("/content/" + fileName)
+                : OutputManager.addToOutput("/content/" + fileName);
         OutputManager.backup(file, "/content/" + fileName);
     }
 
@@ -64,30 +73,71 @@ public class RandomizerFile {
     }
 
     public void patchAll(RandomizerProfile profile) throws IOException {
-        BinaryAccessFile inputDecomp = Yaz0Decoder.decode(new BinaryAccessFile(this.file, "r"));
-        BymlFile byml = BymlFile.parse(inputDecomp);
-        DictionaryNode root = (DictionaryNode) byml.getRoot();
-        ArrayNode objs = (ArrayNode) root.get("Objs");
-        ProgressDialog.prog( "Patching " + file.getName());
-        for(List<RandomizerPatch> patches : patches.values()) {
-            for(RandomizerPatch patch : patches) {
-                if(patch.getType() == 0) {
 
-                    patch.patch(profile, objs);
+        int patchType = patches.values().stream().findAny().get().get(0).getType();
+        if (patchType == 0) {
+            BinaryAccessFile inputDecomp = Yaz0Decoder.decode(new BinaryAccessFile(this.file, "r"));
+            BymlFile byml = BymlFile.parse(inputDecomp);
+            DictionaryNode root = (DictionaryNode) byml.getRoot();
+            ArrayNode objs = (ArrayNode) root.get("Objs");
+            ProgressDialog.prog("Patching " + file.getName());
+            for (List<RandomizerPatch> patches : patches.values()) {
+                for (RandomizerPatch patch : patches) {
+                    if (patch.getType() == 0) {
+
+                        patch.patch(profile, objs);
+                    }
                 }
             }
+            String uuid = UUID.randomUUID().toString();
+            byml.write("FileCache/Decomp-" + uuid);
+            BinaryAccessFile out = new BinaryAccessFile("FileCache/Decomp-" + uuid, "r");
+
+            int alignedSize = (int) ((out.length() + 31) & -32);
+            profile.getRstb().setSize(fileName, alignedSize + 0xe4 + 0x20);
+
+            Yaz0Encoder.encode(out, outputFile.getAbsolutePath());
+
+            inputDecomp.clean();
+            out.clean();
+        } else if (patchType == 1) {
+            String dirUuid = UUID.randomUUID().toString();
+            File outputDir = new File("FileCache/" + dirUuid);
+            outputDir.mkdirs();
+            SarcUnpacker.unpack(getFile(), outputDir);
+
+            String dgnName = getFile().getName().replace(".pack", "");
+
+
+            String filePath = outputDir.getAbsolutePath() + "/Map/CDungeon/" + dgnName + "/" +
+                    dgnName + "_Static.smubin";
+
+            BinaryAccessFile mapFile = Yaz0Decoder.decode(new BinaryAccessFile(filePath, "r"));
+
+            BymlFile byml = BymlFile.parse(mapFile);
+            DictionaryNode root = (DictionaryNode) byml.getRoot();
+            ArrayNode objs = (ArrayNode) root.get("Objs");
+
+            for (List<RandomizerPatch> patches : patches.values()) {
+                for (RandomizerPatch patch : patches) {
+                    if (patch.getType() == 1) {
+                        patch.patch(profile, objs);
+                    }
+                }
+            }
+            String tempPath = outputDir.getAbsolutePath() + "/Map/CDungeon/" + dgnName + ".tmp";
+            byml.write(tempPath);
+            BinaryAccessFile out = new BinaryAccessFile(tempPath, "r");
+            Yaz0Encoder.encode(out, filePath);
+
+            SarcPacker.packIntoSarc(outputDir, outputFile);
+
+            int alignedSize = (int) ((outputFile.length() + 31) & -32);
+            profile.getRstb().setSize(fileName, alignedSize + 0xe4 + 0x20);
+
+            mapFile.clean();
+            out.clean();
         }
-        String uuid = UUID.randomUUID().toString();
-        byml.write("FileCache/Decomp-" + uuid);
-        BinaryAccessFile out = new BinaryAccessFile("FileCache/Decomp-" + uuid, "r");
-
-        int alignedSize = (int) ((out.length() + 31) & -32);
-        profile.getRstb().setSize(fileName, alignedSize + 0xe4 + 0x20);
-
-        Yaz0Encoder.encode(out, outputFile.getAbsolutePath());
-
-        inputDecomp.clean();
-        out.clean();
     }
 
 }

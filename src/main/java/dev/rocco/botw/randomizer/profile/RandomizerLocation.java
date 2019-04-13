@@ -10,11 +10,16 @@ import java.nio.file.Files;
 public class RandomizerLocation {
     private String root;
     private boolean requiresAoc;
+    private int type;
 
     private String[] items;
 
     public String getRoot() {
         return root;
+    }
+
+    public int getType() {
+        return type;
     }
 
     public boolean requiresAoc() {
@@ -31,6 +36,7 @@ public class RandomizerLocation {
         result.requiresAoc = obj.getBoolean("requiresAoc");
 
         result.items = obj.getJSONArray("items").toList().toArray(new String[0]);
+        result.type = obj.getInt("type");
 
         return result;
     }

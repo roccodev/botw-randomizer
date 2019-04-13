@@ -22,4 +22,13 @@ public class RandomPicker {
         return "Npc_SouthHateru007";
     }
 
+    public static String getKey(String[] values, Long seed) {
+        if(rand == null)
+            rand = seed != null ? new Random(seed) : new Random();
+
+        int randNum = rand.nextInt() * values.length;
+
+        return values[randNum];
+    }
+
 }

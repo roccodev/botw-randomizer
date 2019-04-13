@@ -3,8 +3,11 @@ package dev.rocco.botw.randomizer.profile;
 import dev.rocco.botw.randomizer.Config;
 import dev.rocco.botw.randomizer.gui.ProgressDialog;
 import dev.rocco.botw.randomizer.io.OutputManager;
+import dev.rocco.botw.randomizer.profile.defaults.DefaultList;
+import dev.rocco.botw.randomizer.profile.defaults.Defaults;
 import dev.rocco.botw.randomizer.profile.patch.MapLocation;
 import dev.rocco.botw.randomizer.profile.patch.MapPatch;
+import dev.rocco.botw.randomizer.profile.patch.ShrineLocation;
 import dev.rocco.botw.randomizer.rand.RandomPicker;
 import dev.rocco.botw.randomizer.utils.rstb.ResourceTable;
 import org.json.JSONObject;
@@ -49,16 +52,26 @@ public class RandomizerProfile {
         patches.keys().forEachRemaining(k -> {
             if(k.charAt(0) == '#') {
                 RandomizerLocation loc = RandomizerLocation.fromFile(k.substring(1));
-                if(loc.requiresAoc() && Config.aoc) {
+                if(!loc.requiresAoc() || Config.aoc) {
 
                     JSONObject values = patches.getJSONObject(k);
-                    MapPatch patch = MapPatch.fromJson(k, values);
+                    System.out.println("Location type: " + loc.getType());
+                    switch(loc.getType()) {
+                        case 0 /* Map */:
+                            MapPatch patch = MapPatch.fromJson(k, values);
 
-                    try {
-                        MapLocation.findHashes(loc.getItems(), patch);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                            try {
+                                MapLocation.findHashes(loc.getItems(), patch);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        case 1 /* Shrine */:
+                            MapPatch patchForShrine = MapPatch.fromJson(k, values);
+                            ShrineLocation.find(loc, patchForShrine);
+                            break;
                     }
+
                 }
 
             }
@@ -67,6 +80,8 @@ public class RandomizerProfile {
         System.out.println("Total matches: " + MapLocation.getResults().size());
         if(MapLocation.getResults().size() != 0)
             filePatches.putAll(MapLocation.getResults());
+        if(ShrineLocation.getResults().size() != 0)
+            filePatches.putAll(ShrineLocation.getResults());
     }
 
     public String getAuthor() {
@@ -101,12 +116,24 @@ public class RandomizerProfile {
 
             return RandomPicker.getKey(list.getValues(), Config.seed);
         }
+        else if(input.charAt(0) == '§') {
+            String listName = input.substring(1);
+            DefaultList list = getDefaultList(listName);
+            if(list == null) return listName;
+
+            return RandomPicker.getKey(list.getEntries(list.getSubLists().keySet().toArray(new String[0])), Config.seed);
+        }
         else return input;
     }
 
     private RandomizerList getList(String name) {
-        if(!lists.containsKey(name) && !RandomizerStorage.lists.containsKey(name)) return null;
-        return lists.containsKey(name) ? lists.get(name) : RandomizerStorage.lists.get(name);
+        if(!lists.containsKey(name)) return null;
+        return lists.get(name);
+    }
+
+    private DefaultList getDefaultList(String name) {
+        if(!Defaults.lists.containsKey(name)) return null;
+        return Defaults.lists.get(name);
     }
 
     public void patchAll() throws IOException {

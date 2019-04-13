@@ -26,6 +26,9 @@
     },
     "#enemycamps": {
       "UnitConfigName": "@normalEnemies"
+    },
+    "#shrinechests": {
+      "UnitConfigName": "§weapons&armor"
     }
   }
 }

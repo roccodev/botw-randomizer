@@ -14,6 +14,7 @@ public class MapPatch implements RandomizerPatch {
 
     private HashMap<String, String> values = new HashMap<>();
     private String hashId;
+    private int type = 0;
 
     private MapPatch() {}
 
@@ -40,8 +41,14 @@ public class MapPatch implements RandomizerPatch {
 
     @Override
     public void patch(RandomizerProfile profile, Object in) {
+        System.out.println("Patching hash " + hashId);
         ArrayNode objs = (ArrayNode) in;
-        values.forEach((k, v) -> getByHash(hashId, objs).get(k).setValue(profile.pickValue(v)));
+        if(type == 1) {
+            values.forEach((k, v) -> ((DictionaryNode)getByHash(hashId, objs).get("!Parameters")).get(k).setValue(profile.pickValue(v)));
+        } else {
+            values.forEach((k, v) -> getByHash(hashId, objs).get(k).setValue(profile.pickValue(v)));
+        }
+        System.out.println("Patched hash " + hashId);
     }
 
     private static DictionaryNode getByHash(String hash, ArrayNode parent) {
@@ -53,8 +60,12 @@ public class MapPatch implements RandomizerPatch {
         return null;
     }
 
+    public void setType(int type) {
+        this.type = type;
+    }
+
     @Override
     public int getType() {
-        return 0;
+        return type;
     }
 }

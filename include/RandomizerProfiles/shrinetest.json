@@ -1,0 +1,21 @@
+{
+  "name": "Shrine test",
+  "description": "Shrine test",
+  "author": "RoccoDev",
+  "items": [
+    "Shrines"
+  ],
+  "lists": {
+    "dgnCheck": {
+      "DgnObj_DungeonEntrance_Moss": 100.0
+    },
+    "weapons": {
+      "Weapon_Sword_001": 100.0
+    }
+  },
+  "patches": {
+    "#shrinechests": {
+      "DropActor": "@weapons"
+    }
+  }
+}

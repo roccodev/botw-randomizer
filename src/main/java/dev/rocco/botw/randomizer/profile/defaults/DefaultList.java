@@ -29,4 +29,8 @@ public class DefaultList {
         }
         return result;
     }
+
+    public HashMap<String, DefaultSubList> getSubLists() {
+        return subLists;
+    }
 }
